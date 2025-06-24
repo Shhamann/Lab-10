@@ -1,5 +1,5 @@
+# Вариант 4
 import json, time
-
 import pyttsx3, pyaudio, vosk
 
 
@@ -27,7 +27,7 @@ class Speech:
 
 class Recognize:
     def __init__(self):
-        model = vosk.Model('model_small')
+        model = vosk.Model('vosk_model')
         self.record = vosk.KaldiRecognizer(model, 16000)
         self.stream()
 
@@ -51,18 +51,18 @@ class Recognize:
 
 def speak(text):
     speech = Speech()
-    speech.text2voice(speaker=1, text=text)
+    speech.text2voice(text=text)
 
 
 rec = Recognize()
 text_gen = rec.listen()
 rec.stream.stop_stream()
-speak('Starting')
+speak('привет!')
 time.sleep(0.5)
 rec.stream.start_stream()
 for text in text_gen:
-    if text == 'закрыть':
-        speak('Бывай, ихтиандр')
+    if text == 'cтоп':
+        speak('пока')
         quit()
     else:
         print(text)
