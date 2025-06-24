@@ -1,6 +1,6 @@
-# Вариант 4
+# Вариант 5 (не разобралась с запросом для API в 4 варианте)
 import json, time
-import pyttsx3, pyaudio, vosk
+import pyttsx3, pyaudio, vosk, requests
 
 
 
@@ -52,17 +52,38 @@ class Recognize:
 def speak(text):
     speech = Speech()
     speech.text2voice(text=text)
+    print(text)
 
+def get_random_user(request):
+    try:
+        response = requests.get('https://randomuser.me/api/')
+        data = response.json()
+        user = data['results'][0]
+        if request == 'name':
+            name = user['name']
+            speak(f"Name: {name['title']} {name['first']} {name['last']}")
+        else:
+            speak(f"{request}: {user[request]}")
+    except requests.exceptions.RequestException as e:
+        print(f"Ошибка при запросе к API: {e}")
+        return None
+    except:
+        speak("Wrong command")
 
-rec = Recognize()
-text_gen = rec.listen()
-rec.stream.stop_stream()
-speak('привет!')
-time.sleep(0.5)
-rec.stream.start_stream()
-for text in text_gen:
-    if text == 'cтоп':
-        speak('пока')
-        quit()
-    else:
-        print(text)
+def record():
+    rec = Recognize()
+    text_gen = rec.listen()
+    rec.stream.stop_stream()
+    speak('hi, say the command you want: name, email, phone, gender')
+    print('hi, say the command you want: name, email, phone, gender')
+    time.sleep(0.5)
+    rec.stream.start_stream()
+    for text in text_gen:
+        if text == 'stop':
+            speak('bye bye')
+            quit()
+        else:
+            print(f'You said: {text}')
+            get_random_user(text)
+
+record()
