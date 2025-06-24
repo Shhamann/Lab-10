@@ -75,7 +75,6 @@ def record():
     text_gen = rec.listen()
     rec.stream.stop_stream()
     speak('hi, say the command you want: name, email, phone, gender')
-    print('hi, say the command you want: name, email, phone, gender')
     time.sleep(0.5)
     rec.stream.start_stream()
     for text in text_gen:
